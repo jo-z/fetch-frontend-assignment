@@ -2,7 +2,9 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { api } from '$lib/constants';
-	let dogs = $state([]);
+	import DogBox from './dog.svelte';
+	import { type Dog } from '$lib/interfaces';
+	let dogs: Array<Dog> = $state([]);
 	let next = $state('');
 	onMount(async () => {
 		try {
@@ -29,5 +31,15 @@
 	});
 </script>
 
+<div class="dog-container">
+	{#each dogs as dogInfo}
+		<DogBox {...dogInfo} />
+	{/each}
+</div>
+
 <style>
+	.dog-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
 </style>
