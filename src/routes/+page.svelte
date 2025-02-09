@@ -8,11 +8,13 @@
 	let dogs: Array<Dog> = $state([]);
 	let breeds: Array<string> = $state([]);
 	let selectedBreeds = $state([]);
+	let sortField: 'breed' | 'name' | 'age' = $state('breed');
+	let sortDirection: 'asc' | 'desc' = $state('asc');
 	let next = $state('');
 
 	const search = async () => {
 		const searchResponse = await fetch(
-			`${api}/dogs/search?${selectedBreeds.length ? selectedBreeds.map((breed) => `breeds=${breed}`).join('&') : ''}`,
+			`${api}/dogs/search?${selectedBreeds.length ? selectedBreeds.map((breed) => `breeds=${breed}`).join('&') : ''}&sort=${sortField}:${sortDirection}`,
 			{
 				credentials: 'include'
 			}
@@ -47,6 +49,8 @@
 <Filter
 	{breeds}
 	bind:selectedBreeds
+	bind:sortDirection
+	bind:sortField
 	searchOnClick={() => {
 		search();
 	}}

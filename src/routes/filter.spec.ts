@@ -1,14 +1,48 @@
 import { describe, expect, it } from 'vitest';
 import Filter from './filter.svelte';
 import { render, screen } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
 
 describe('filter component', () => {
-	it('should allow selecting from a provided list of breeds', async () => {
-		render(Filter, { breeds: sampleBreedList, selectedBreeds: [], searchOnClick: () => {} });
+	it('should allow selecting from a provided list of breeds', () => {
+		render(Filter, {
+			breeds: sampleBreedList,
+			selectedBreeds: [],
+			searchOnClick: () => {},
+			sortDirection: 'asc',
+			sortField: 'breed'
+		});
 		sampleBreedList.forEach((breed) => {
 			const breedEntry = screen.getByText(breed);
 			expect(breedEntry).toBeInTheDocument();
 		});
+	});
+	it('should have options to sort by ascending or descending values', async () => {
+		const user = userEvent.setup();
+		render(Filter, {
+			breeds: sampleBreedList,
+			selectedBreeds: [],
+			searchOnClick: () => {},
+			sortDirection: 'asc',
+			sortField: 'breed'
+		});
+		expect(screen.getByText('Ascending')).toBeVisible();
+		await user.click(screen.getByLabelText('Sort Direction:'));
+		expect(screen.getByText('Descending')).toBeInTheDocument();
+	});
+	it('should have options to sort by breed, name, and age', async () => {
+		const user = userEvent.setup();
+		render(Filter, {
+			breeds: sampleBreedList,
+			selectedBreeds: [],
+			searchOnClick: () => {},
+			sortDirection: 'asc',
+			sortField: 'breed'
+		});
+		expect(screen.getByText('Breed')).toBeInTheDocument();
+		await user.click(screen.getByLabelText('Sort Field:'));
+		expect(screen.getByText('Name')).toBeInTheDocument();
+		expect(screen.getByText('Age')).toBeInTheDocument();
 	});
 });
 const sampleBreedList = [
