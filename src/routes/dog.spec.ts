@@ -6,7 +6,7 @@ const sampleDog = {
 	name: 'Leonard',
 	age: 17,
 	breed: 'Yorkshire Terrier',
-	zip_code: 90210,
+	zip_code: '90210',
 	id: '123a4b56',
 	img: 'placeholder.jpg'
 };

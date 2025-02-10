@@ -5,6 +5,8 @@
 	import DogBox from './dog.svelte';
 	import { type Dog } from '$lib/interfaces';
 	import Filter from './filter.svelte';
+	import selectedDogs from '$lib/selectedDogs.svelte';
+
 	let dogs: Array<Dog> = $state([]);
 	let breeds: Array<string> = $state([]);
 	let selectedBreeds = $state([]);
@@ -15,6 +17,13 @@
 	let totalDogs = $state(0);
 	let perPage = $state(25);
 	let currentPage = $state(1);
+
+	const toggleFavorite = (id: string) => {
+		console.log('id: ', id);
+		if (selectedDogs.has(id)) selectedDogs.delete(id);
+		else selectedDogs.add(id);
+		console.log('selectedDogs: ', selectedDogs);
+	};
 
 	const search = async (searchString?: string) => {
 		const searchResponse = searchString
@@ -54,18 +63,26 @@
 	});
 </script>
 
-<Filter
-	{breeds}
-	bind:selectedBreeds
-	bind:sortDirection
-	bind:sortField
-	searchOnClick={() => {
-		search();
-	}}
-/>
+<div>
+	<Filter
+		{breeds}
+		bind:selectedBreeds
+		bind:sortDirection
+		bind:sortField
+		searchOnClick={() => {
+			search();
+		}}
+	/>
+	<a href="/match" class={[!selectedDogs.size && 'disabled']}>Match</a>
+</div>
 <div class="dog-container">
 	{#each dogs as dogInfo}
-		<DogBox {...dogInfo} />
+		<DogBox
+			{...dogInfo}
+			toggleFavorite={() => {
+				toggleFavorite(dogInfo.id);
+			}}
+		/>
 	{/each}
 </div>
 {#if prev?.length && currentPage > 1}
@@ -89,5 +106,9 @@
 	.dog-container {
 		display: flex;
 		flex-wrap: wrap;
+	}
+	.disabled {
+		pointer-events: none;
+		text-decoration: line-through;
 	}
 </style>
