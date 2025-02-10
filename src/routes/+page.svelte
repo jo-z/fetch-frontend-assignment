@@ -11,19 +11,27 @@
 	let sortField: 'breed' | 'name' | 'age' = $state('breed');
 	let sortDirection: 'asc' | 'desc' = $state('asc');
 	let next = $state('');
+	let prev = $state('');
+	let totalDogs = $state(0);
+	let perPage = $state(25);
+	let currentPage = $state(1);
 
-	const search = async () => {
-		const searchResponse = await fetch(
-			`${api}/dogs/search?${selectedBreeds.length ? selectedBreeds.map((breed) => `breeds=${breed}`).join('&') : ''}&sort=${sortField}:${sortDirection}`,
-			{
-				credentials: 'include'
-			}
-		);
+	const search = async (searchString?: string) => {
+		const searchResponse = searchString
+			? await fetch(`${api}${searchString}`, { credentials: 'include' })
+			: await fetch(
+					`${api}/dogs/search?${selectedBreeds.length ? selectedBreeds.map((breed) => `breeds=${breed}`).join('&') : ''}&sort=${sortField}:${sortDirection}&size=${perPage}&from=${(currentPage - 1) * perPage}`,
+					{
+						credentials: 'include'
+					}
+				);
 		console.log(searchResponse);
 		if (searchResponse.status === 401) goto('/login');
 		else {
 			const searchResults = await searchResponse.json();
 			next = searchResults.next;
+			prev = searchResults.prev;
+			totalDogs = searchResults.total;
 			console.log('searchResults: ', searchResults);
 			const headers = new Headers();
 			headers.append('Content-Type', 'application/json');
@@ -60,6 +68,22 @@
 		<DogBox {...dogInfo} />
 	{/each}
 </div>
+{#if prev?.length && currentPage > 1}
+	<button
+		onclick={() => {
+			currentPage--;
+			search(prev);
+		}}>Previous</button
+	>
+{/if}
+{#if next?.length && totalDogs > perPage * currentPage}
+	<button
+		onclick={() => {
+			currentPage++;
+			search(next);
+		}}>Next</button
+	>
+{/if}
 
 <style>
 	.dog-container {
