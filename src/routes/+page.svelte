@@ -69,6 +69,7 @@
 		bind:selectedBreeds
 		bind:sortDirection
 		bind:sortField
+		bind:perPage
 		searchOnClick={() => {
 			search();
 		}}

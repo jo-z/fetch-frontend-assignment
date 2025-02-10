@@ -4,12 +4,14 @@
 		selectedBreeds = $bindable([]),
 		sortField = $bindable('breed'),
 		sortDirection = $bindable('asc'),
+		perPage = $bindable(25),
 		searchOnClick
 	}: {
 		breeds: Array<string>;
 		selectedBreeds: Array<string>;
 		sortField: 'breed' | 'age' | 'name';
 		sortDirection: 'asc' | 'desc';
+		perPage: number;
 		searchOnClick: () => void;
 	} = $props();
 </script>
@@ -33,6 +35,8 @@
 			<option value="asc">Ascending</option>
 			<option value="desc">Descending</option>
 		</select>
+		<label for="results per page">Results Per Page:</label>
+		<input type="number" min="1" max="100" id="results per page" bind:value={perPage} />
 		<button
 			onclick={() => {
 				searchOnClick();

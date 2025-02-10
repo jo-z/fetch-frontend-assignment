@@ -10,7 +10,8 @@ describe('filter component', () => {
 			selectedBreeds: [],
 			searchOnClick: () => {},
 			sortDirection: 'asc',
-			sortField: 'breed'
+			sortField: 'breed',
+			perPage: 25
 		});
 		sampleBreedList.forEach((breed) => {
 			const breedEntry = screen.getByText(breed);
@@ -24,7 +25,8 @@ describe('filter component', () => {
 			selectedBreeds: [],
 			searchOnClick: () => {},
 			sortDirection: 'asc',
-			sortField: 'breed'
+			sortField: 'breed',
+			perPage: 25
 		});
 		expect(screen.getByText('Ascending')).toBeVisible();
 		await user.click(screen.getByLabelText('Sort Direction:'));
@@ -37,12 +39,26 @@ describe('filter component', () => {
 			selectedBreeds: [],
 			searchOnClick: () => {},
 			sortDirection: 'asc',
-			sortField: 'breed'
+			sortField: 'breed',
+			perPage: 25
 		});
 		expect(screen.getByText('Breed')).toBeInTheDocument();
 		await user.click(screen.getByLabelText('Sort Field:'));
 		expect(screen.getByText('Name')).toBeInTheDocument();
 		expect(screen.getByText('Age')).toBeInTheDocument();
+	});
+
+	it('per page option should default to passed perPage value', () => {
+		render(Filter, {
+			breeds: sampleBreedList,
+			selectedBreeds: [],
+			searchOnClick: () => {},
+			sortDirection: 'asc',
+			sortField: 'breed',
+			perPage: 30
+		});
+		const input: HTMLInputElement = screen.getByLabelText('Results Per Page:');
+		expect(input.value).toBe('30');
 	});
 });
 const sampleBreedList = [
