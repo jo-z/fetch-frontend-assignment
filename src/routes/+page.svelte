@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { api } from '$lib/constants';
 	import DogBox from './dog.svelte';
-	import { type Dog } from '$lib/interfaces';
+	import { type Coordinates, type Dog, type Location } from '$lib/interfaces';
 	import Filter from './filter.svelte';
 	import selectedDogs from '$lib/selectedDogs.svelte';
+	import { milesToLatDegrees, milesToLonDegrees } from '$lib/utils';
 
 	let dogs: Array<Dog> = $state([]);
 	let breeds: Array<string> = $state([]);
@@ -17,6 +18,10 @@
 	let totalDogs = $state(0);
 	let perPage = $state(25);
 	let currentPage = $state(1);
+	let distance: number | null = $state(null);
+
+	let currentZip: { code?: string } = $state({});
+	setContext('currentZip', currentZip);
 
 	const toggleFavorite = (id: string) => {
 		console.log('id: ', id);
@@ -26,10 +31,53 @@
 	};
 
 	const search = async (searchString?: string) => {
+		let locations: Array<Location> = [];
+		if (!searchString && currentZip?.code && distance) {
+			const headers = new Headers();
+			headers.append('Content-Type', 'application/json');
+			const locationResponse = await fetch(`${api}/locations`, {
+				credentials: 'include',
+				body: JSON.stringify([currentZip.code]),
+				headers,
+				method: 'POST'
+			});
+			const locationObject: Location = (await locationResponse.json())[0];
+			const coordinates = {
+				lat: locationObject.latitude,
+				lon: locationObject.longitude
+			};
+			const yDistance = milesToLatDegrees(distance / 2);
+			const xDistance = milesToLonDegrees(coordinates.lat, distance / 2);
+			console.log(
+				JSON.stringify({
+					geoBoundingBox: {
+						top: { lat: coordinates.lat + yDistance, lon: coordinates.lon },
+						bottom: { lat: coordinates.lat - yDistance, lon: coordinates.lon },
+						left: { lat: coordinates.lat, lon: coordinates.lon - xDistance },
+						right: { lat: coordinates.lat, lon: coordinates.lon + xDistance }
+					},
+					size: 10000
+				})
+			);
+			const locationSearchResponse = await fetch(`${api}/locations/search`, {
+				credentials: 'include',
+				body: JSON.stringify({
+					geoBoundingBox: {
+						top_left: { lat: coordinates.lat + yDistance, lon: coordinates.lon - xDistance },
+						bottom_right: { lat: coordinates.lat - yDistance, lon: coordinates.lon + xDistance }
+					},
+					size: 10000
+				}),
+				headers,
+				method: 'POST'
+			});
+			locations = (await locationSearchResponse.json()).results;
+		}
+		console.log('locations: ', locations);
 		const searchResponse = searchString
 			? await fetch(`${api}${searchString}`, { credentials: 'include' })
 			: await fetch(
-					`${api}/dogs/search?${selectedBreeds.length ? selectedBreeds.map((breed) => `breeds=${breed}`).join('&') : ''}&sort=${sortField}:${sortDirection}&size=${perPage}&from=${(currentPage - 1) * perPage}`,
+					`${api}/dogs/search?${selectedBreeds.length ? selectedBreeds.map((breed) => `breeds=${breed}`).join('&') : ''}&sort=${sortField}:${sortDirection}&size=${perPage}&from=${(currentPage - 1) * perPage}${locations.length ? `&${locations.map((location) => `zipCodes=${location.zip_code}`).join('&')}` : ''}`,
 					{
 						credentials: 'include'
 					}
@@ -70,6 +118,7 @@
 		bind:sortDirection
 		bind:sortField
 		bind:perPage
+		bind:distance
 		searchOnClick={() => {
 			search();
 		}}

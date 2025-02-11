@@ -11,6 +11,7 @@ describe('filter component', () => {
 			searchOnClick: () => {},
 			sortDirection: 'asc',
 			sortField: 'breed',
+			distance: null,
 			perPage: 25
 		});
 		sampleBreedList.forEach((breed) => {
@@ -26,6 +27,7 @@ describe('filter component', () => {
 			searchOnClick: () => {},
 			sortDirection: 'asc',
 			sortField: 'breed',
+			distance: null,
 			perPage: 25
 		});
 		expect(screen.getByText('Ascending')).toBeVisible();
@@ -40,6 +42,7 @@ describe('filter component', () => {
 			searchOnClick: () => {},
 			sortDirection: 'asc',
 			sortField: 'breed',
+			distance: null,
 			perPage: 25
 		});
 		expect(screen.getByText('Breed')).toBeInTheDocument();
@@ -55,6 +58,7 @@ describe('filter component', () => {
 			searchOnClick: () => {},
 			sortDirection: 'asc',
 			sortField: 'breed',
+			distance: null,
 			perPage: 30
 		});
 		const input: HTMLInputElement = screen.getByLabelText('Results Per Page:');

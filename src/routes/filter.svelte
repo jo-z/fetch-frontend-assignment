@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+
 	let {
 		breeds,
 		selectedBreeds = $bindable([]),
 		sortField = $bindable('breed'),
 		sortDirection = $bindable('asc'),
 		perPage = $bindable(25),
+		distance = $bindable(null),
 		searchOnClick
 	}: {
 		breeds: Array<string>;
@@ -12,8 +15,11 @@
 		sortField: 'breed' | 'age' | 'name';
 		sortDirection: 'asc' | 'desc';
 		perPage: number;
+		distance: number | null;
 		searchOnClick: () => void;
 	} = $props();
+	let currentZip: { code?: string } = getContext('currentZip');
+	let tempZip = $state('');
 </script>
 
 <div>
@@ -35,12 +41,28 @@
 			<option value="asc">Ascending</option>
 			<option value="desc">Descending</option>
 		</select>
+		<label for="distance">Distance:</label><input
+			type="number"
+			min="0"
+			id="distance"
+			bind:value={distance}
+			size="5"
+		/>
+		miles from
+		<label for="zipcode">Zip Code:</label>
+		<input id="zipcode" type="text" pattern={`[0-9]{5}`} size="5" bind:value={tempZip} />
 		<label for="results per page">Results Per Page:</label>
 		<input type="number" min="1" max="100" id="results per page" bind:value={perPage} />
 		<button
 			onclick={() => {
-				searchOnClick();
-				console.log('component selected breeds: ', $state.snapshot(selectedBreeds));
+				const formElement = document.getElementsByName(
+					'search and filter'
+				)[0] as HTMLFormElement | null;
+				if (formElement?.checkValidity()) {
+					currentZip.code = tempZip;
+					console.log('tempZip: ', tempZip);
+					searchOnClick();
+				}
 			}}>Search</button
 		>
 	</form>
