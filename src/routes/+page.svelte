@@ -122,8 +122,8 @@
 		searchOnClick={() => {
 			search();
 		}}
+		matchEnabled={Boolean(selectedDogs?.size)}
 	/>
-	<a href="/match" class={[!selectedDogs.size && 'disabled']}>Match</a>
 </div>
 {#if dogs.length}
 	<div class="dog-container">
@@ -160,9 +160,5 @@
 	.dog-container {
 		display: flex;
 		flex-wrap: wrap;
-	}
-	.disabled {
-		pointer-events: none;
-		text-decoration: line-through;
 	}
 </style>
