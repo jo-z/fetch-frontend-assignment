@@ -125,31 +125,35 @@
 	/>
 	<a href="/match" class={[!selectedDogs.size && 'disabled']}>Match</a>
 </div>
-<div class="dog-container">
-	{#each dogs as dogInfo}
-		<DogBox
-			{...dogInfo}
-			toggleFavorite={() => {
-				toggleFavorite(dogInfo.id);
-			}}
-		/>
-	{/each}
-</div>
-{#if prev?.length && currentPage > 1}
-	<button
-		onclick={() => {
-			currentPage--;
-			search(prev);
-		}}>Previous</button
-	>
-{/if}
-{#if next?.length && totalDogs > perPage * currentPage}
-	<button
-		onclick={() => {
-			currentPage++;
-			search(next);
-		}}>Next</button
-	>
+{#if dogs.length}
+	<div class="dog-container">
+		{#each dogs as dogInfo}
+			<DogBox
+				{...dogInfo}
+				toggleFavorite={() => {
+					toggleFavorite(dogInfo.id);
+				}}
+			/>
+		{/each}
+	</div>
+	{#if prev?.length && currentPage > 1}
+		<button
+			onclick={() => {
+				currentPage--;
+				search(prev);
+			}}>Previous</button
+		>
+	{/if}
+	{#if next?.length && totalDogs > perPage * currentPage}
+		<button
+			onclick={() => {
+				currentPage++;
+				search(next);
+			}}>Next</button
+		>
+	{/if}
+{:else}
+	<p>No dogs found. Please try again with more generous search criteria</p>
 {/if}
 
 <style>
