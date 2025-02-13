@@ -3,7 +3,6 @@
 	import DogBox from './dog.svelte';
 	import { type Dog, type Location } from '$lib/interfaces';
 	import Filter from './filter.svelte';
-	import selectedDogs from '$lib/selectedDogs.svelte';
 	import { milesToLatDegrees, milesToLonDegrees } from '$lib/utils';
 	import {
 		getBreeds,
@@ -35,7 +34,7 @@
 		if (!searchString && currentZip?.code && distance) {
 			const headers = new Headers();
 			headers.append('Content-Type', 'application/json');
-			const locationObject: Location = (await getLocations([currentZip.code]))[0];
+			const locationObject = (await getLocations([currentZip.code]))[0];
 			const coordinates = {
 				lat: locationObject.latitude,
 				lon: locationObject.longitude

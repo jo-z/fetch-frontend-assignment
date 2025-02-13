@@ -20,7 +20,11 @@
 	});
 </script>
 
-{#if match}
+{#if !selectedDogs.size}
+	<p>
+		No dogs currently favorited. Please find some new favorites on <a href="/">the search page!</a>
+	</p>
+{:else if match}
 	<DogComponent {...match} />
 {:else}
 	<p>Please wait for your match</p>

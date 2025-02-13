@@ -4,7 +4,8 @@
 </script>
 
 <nav>
-	<a href="/">Search</a><a href="/match">Find Match</a><a href="/instructions">Instructions</a
+	<a href="/">Search</a><a href="/favorites">Favorites</a><a href="/match">Find Match</a><a
+		href="/instructions">Instructions</a
 	><button onclick={logout}>Logout</button>
 </nav>
 
