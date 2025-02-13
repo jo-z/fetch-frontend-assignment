@@ -113,3 +113,11 @@ export const getMatch = async (dogIds: Array<string>) => {
 	const body: { match: string } = await response.json();
 	return body;
 };
+
+export const logout = async () => {
+	await fetch(`${api}/auth/logout`, {
+		credentials: 'include',
+		method: 'POST'
+	});
+	goto('/login');
+};
