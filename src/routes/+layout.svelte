@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Frame from '$lib/svgs/royalFrame.svelte';
 	let { children } = $props();
 </script>
 

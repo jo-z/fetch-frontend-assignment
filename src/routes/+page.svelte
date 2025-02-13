@@ -19,16 +19,10 @@
 	let perPage = $state(25);
 	let currentPage = $state(1);
 	let distance: number | null = $state(null);
+	let initialData = $state(false);
 
 	let currentZip: { code?: string } = $state({});
 	setContext('currentZip', currentZip);
-
-	const toggleFavorite = (id: string) => {
-		console.log('id: ', id);
-		if (selectedDogs.has(id)) selectedDogs.delete(id);
-		else selectedDogs.add(id);
-		console.log('selectedDogs: ', selectedDogs);
-	};
 
 	const search = async (searchString?: string) => {
 		let locations: Array<Location> = [];
@@ -107,6 +101,7 @@
 			search();
 			const breedsResponse = await fetch(`${api}/dogs/breeds`, { credentials: 'include' });
 			breeds = await breedsResponse.json();
+			initialData = true;
 		} catch (error) {}
 	});
 </script>
@@ -128,12 +123,7 @@
 {#if dogs.length}
 	<div class="dog-container">
 		{#each dogs as dogInfo}
-			<DogBox
-				{...dogInfo}
-				toggleFavorite={() => {
-					toggleFavorite(dogInfo.id);
-				}}
-			/>
+			<DogBox {...dogInfo} />
 		{/each}
 	</div>
 	{#if prev?.length && currentPage > 1}
@@ -152,8 +142,10 @@
 			}}>Next</button
 		>
 	{/if}
-{:else}
+{:else if initialData}
 	<p>No dogs found. Please try again with more generous search criteria</p>
+{:else}
+	<p>Currently loading Dogs. Please be patient</p>
 {/if}
 
 <style>

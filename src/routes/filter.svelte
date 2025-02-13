@@ -32,7 +32,7 @@
 			<button
 				onclick={() => {
 					showSort = !showSort;
-				}}>sort</button
+				}}>Sort</button
 			>
 			<span>
 				{#if showSort}

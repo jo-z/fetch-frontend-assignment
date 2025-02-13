@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { api } from '$lib/constants';
-	import { type DogProps, type Location, type Coordinates } from '$lib/interfaces';
+	import { type Dog, type Location, type Coordinates } from '$lib/interfaces';
 	import selectedDogs from '$lib/selectedDogs.svelte';
 	import { distanceBetweenLatLon } from '$lib/utils';
 	import { getContext, onMount } from 'svelte';
+	import BottomBorder from '$lib/svgs/BottomBorder.svelte';
+	import FavoriteBorder from '$lib/svgs/FavoriteBorder.svelte';
 
 	const currentZip: { code?: string } = getContext('currentZip');
 
-	let { age, img, breed, id, zip_code, name, toggleFavorite }: DogProps = $props();
+	let { age, img, breed, id, zip_code, name }: Dog = $props();
 	const calculateDistance = async (zipcode: string | undefined) => {
 		console.log('zipcode: ', zipcode);
 		if (zipcode) {
@@ -30,10 +32,28 @@
 		return null;
 	};
 	let distance: Promise<number | null> = $derived(calculateDistance(currentZip?.code));
+	const toggleFavorite = (id: string) => {
+		console.log('id: ', id);
+		if (selectedDogs.has(id)) selectedDogs.delete(id);
+		else selectedDogs.add(id);
+		console.log('selectedDogs: ', selectedDogs);
+	};
 </script>
 
-<button class={['dog-box', selectedDogs.has(id) && 'selected']} onclick={toggleFavorite}>
-	<img src={img} alt={`picture of ${name}`} />
+<button
+	class={['dog-box', selectedDogs.has(id) && 'selected']}
+	onclick={() => {
+		toggleFavorite(id);
+	}}
+>
+	<div class="image-box">
+		{#if selectedDogs.has(id)}<FavoriteBorder />
+		{:else}
+			<span id="blank-placeholder"></span>
+		{/if}
+		<img src={img} alt={`picture of ${name}`} id="dog-photo" />
+		<BottomBorder --transform="rotateX(0.5turn)" />
+	</div>
 	<div class="info-box">
 		<p>Name: {name}</p>
 		<p>Age: {age}</p>
@@ -45,21 +65,51 @@
 		{/await}
 		<p>Zip Code: {zip_code}</p>
 	</div>
+	<BottomBorder />
 </button>
 
 <style>
+	p {
+		color: var(--dark);
+		font-size: 1rem;
+		font-family: 'Cabin', sans-serif;
+	}
 	.dog-box {
-		border: 1px solid black;
+		background: none;
+		border: none;
 		margin: 1rem;
 	}
 	.selected {
-		background-color: aquamarine;
+		background-color: var(--dark-accent);
+		color: var(--light);
 	}
-	img {
-		width: 400px;
-		height: 400px;
+	.selected p {
+		color: var(--light-accent);
+	}
+
+	.image-box {
+		color: var(--dark-accent);
+	}
+	.selected .image-box {
+		color: var(--light);
+	}
+
+	.image-box {
+		display: flex;
+		flex-direction: column;
+	}
+
+	button {
+		color: var(--dark-accent);
+	}
+	#dog-photo {
+		width: 350px;
+		height: 350px;
 		object-fit: contain;
-		padding: 10px;
+		padding: 0, 15px;
 		object-position: 50% 50%;
+	}
+	#blank-placeholder {
+		height: 100px;
 	}
 </style>

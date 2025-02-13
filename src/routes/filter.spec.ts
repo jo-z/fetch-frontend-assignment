@@ -4,7 +4,8 @@ import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
 describe('filter component', () => {
-	it('should allow selecting from a provided list of breeds', () => {
+	it('should allow selecting from a provided list of breeds', async () => {
+		const user = userEvent.setup();
 		render(Filter, {
 			breeds: sampleBreedList,
 			selectedBreeds: [],
@@ -14,6 +15,7 @@ describe('filter component', () => {
 			distance: null,
 			perPage: 25
 		});
+		await user.click(screen.getByText('Filter'));
 		sampleBreedList.forEach((breed) => {
 			const breedEntry = screen.getByText(breed);
 			expect(breedEntry).toBeInTheDocument();
@@ -30,6 +32,7 @@ describe('filter component', () => {
 			distance: null,
 			perPage: 25
 		});
+		await user.click(screen.getByText('Sort'));
 		expect(screen.getByText('Ascending')).toBeVisible();
 		await user.click(screen.getByLabelText('Sort Direction:'));
 		expect(screen.getByText('Descending')).toBeInTheDocument();
@@ -45,6 +48,7 @@ describe('filter component', () => {
 			distance: null,
 			perPage: 25
 		});
+		await user.click(screen.getByText('Sort'));
 		expect(screen.getByText('Breed')).toBeInTheDocument();
 		await user.click(screen.getByLabelText('Sort Field:'));
 		expect(screen.getByText('Name')).toBeInTheDocument();

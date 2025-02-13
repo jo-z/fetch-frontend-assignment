@@ -7,10 +7,6 @@ export interface Dog {
 	breed: string;
 }
 
-export interface DogProps extends Dog {
-	toggleFavorite?: () => void;
-}
-
 export interface Location {
 	zip_code: string;
 	latitude: number;
