@@ -1,27 +1,18 @@
 <script lang="ts">
-	import { api } from '$lib/constants';
-	import { type Dog, type Location, type Coordinates } from '$lib/interfaces';
+	import { type Dog } from '$lib/interfaces';
 	import selectedDogs from '$lib/selectedDogs.svelte';
 	import { distanceBetweenLatLon } from '$lib/utils';
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import BottomBorder from '$lib/svgs/BottomBorder.svelte';
 	import FavoriteBorder from '$lib/svgs/FavoriteBorder.svelte';
+	import { getLocations } from '$lib/api';
 
 	const currentZip: { code?: string } = getContext('currentZip');
 
 	let { age, img, breed, id, zip_code, name }: Dog = $props();
 	const calculateDistance = async (zipcode: string | undefined) => {
-		console.log('zipcode: ', zipcode);
 		if (zipcode) {
-			const headers = new Headers();
-			headers.append('Content-Type', 'application/json');
-			const locationResponse = await fetch(`${api}/locations`, {
-				credentials: 'include',
-				body: JSON.stringify([zipcode, zip_code]),
-				headers,
-				method: 'POST'
-			});
-			const locationObjectArr: Array<Location> = await locationResponse.json();
+			const locationObjectArr = await getLocations([zipcode, zip_code]);
 			return Math.round(
 				distanceBetweenLatLon(
 					{ lat: locationObjectArr[0].latitude, lon: locationObjectArr[0].longitude },

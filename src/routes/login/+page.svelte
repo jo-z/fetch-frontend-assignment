@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { api } from '$lib/constants';
+	import { login } from '$lib/api';
 	let name = $state('');
 	let email = $state('');
 	let error = $state(0);
@@ -17,16 +16,7 @@
 <form
 	onsubmit={async (e) => {
 		e.preventDefault();
-		const headers = new Headers();
-		headers.append('Content-Type', 'application/json');
-		const response = await fetch(`${api}/auth/login`, {
-			body: JSON.stringify({ name, email }),
-			method: 'POST',
-			headers,
-			credentials: 'include'
-		});
-		if (response.status === 200) goto('/');
-		else error = response.status;
+		error = (await login({ name, email })) || 0;
 	}}
 >
 	<label for="name">Name:</label> <input required type="text" id="name" bind:value={name} />

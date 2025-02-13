@@ -1,3 +1,4 @@
 import { SvelteSet } from 'svelte/reactivity';
 
-export default new SvelteSet();
+const selectedDogs: Set<string> = new SvelteSet();
+export default selectedDogs;
