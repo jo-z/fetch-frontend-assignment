@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, setContext } from 'svelte';
 	import DogBox from './dog.svelte';
+	import Button from '$lib/Button.svelte';
 	import { type Dog, type Location } from '$lib/interfaces';
 	import Filter from './filter.svelte';
 	import { milesToLatDegrees, milesToLonDegrees } from '$lib/utils';
@@ -52,23 +53,25 @@
 			).results;
 		}
 		console.log('locations: ', locations);
-		const searchResults = searchString
-			? await searchDogsWithString(searchString)
-			: await searchDogs({
-					breeds: selectedBreeds,
-					perPage,
-					currentPage,
-					sortDirection,
-					sortField,
-					zipCodes: locations.map((location) => location.zip_code)
-				});
-
+		let searchResults;
+		if (searchString) {
+			searchResults = await searchDogsWithString(searchString);
+		} else {
+			currentPage = 1;
+			searchResults = await searchDogs({
+				breeds: selectedBreeds,
+				perPage,
+				currentPage,
+				sortDirection,
+				sortField,
+				zipCodes: locations.map((location) => location.zip_code)
+			});
+		}
 		next = searchResults?.next || '';
 		prev = searchResults?.prev || '';
 		totalDogs = searchResults.total;
 		console.log('searchResults: ', searchResults);
-		const headers = new Headers();
-		headers.append('Content-Type', 'application/json');
+
 		dogs = await getDogs(searchResults.resultIds);
 	};
 
@@ -100,22 +103,26 @@
 			<DogBox {...dogInfo} />
 		{/each}
 	</div>
-	{#if prev?.length && currentPage > 1}
-		<button
-			onclick={() => {
-				currentPage--;
-				search(prev);
-			}}>Previous</button
-		>
-	{/if}
-	{#if next?.length && totalDogs > perPage * currentPage}
-		<button
-			onclick={() => {
-				currentPage++;
-				search(next);
-			}}>Next</button
-		>
-	{/if}
+	<div id="page-button-container">
+		{#if prev?.length && currentPage > 1}
+			<Button
+				onclick={() => {
+					currentPage--;
+					search(prev);
+				}}>Previous</Button
+			>
+		{:else}<span></span>
+		{/if}
+		{#if next?.length && totalDogs > perPage * currentPage}
+			<Button
+				id="next-button"
+				onclick={() => {
+					currentPage++;
+					search(next);
+				}}>Next</Button
+			>
+		{/if}
+	</div>
 {:else if initialData}
 	<p>No dogs found. Please try again with more generous search criteria</p>
 {:else}
@@ -123,6 +130,10 @@
 {/if}
 
 <style>
+	#page-button-container {
+		display: flex;
+		justify-content: space-between;
+	}
 	.dog-container {
 		display: flex;
 		flex-wrap: wrap;

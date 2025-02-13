@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
+	import Button from '$lib/Button.svelte';
 
 	let {
 		breeds,
@@ -27,10 +28,10 @@
 <div>
 	<form name="search and filter">
 		<span id="sort">
-			<button
+			<Button
 				onclick={() => {
 					showSort = !showSort;
-				}}>Sort</button
+				}}>Sort</Button
 			>
 			<span>
 				{#if showSort}
@@ -49,10 +50,10 @@
 			</span>
 		</span>
 		<span id="filter">
-			<button
+			<Button
 				onclick={() => {
 					showFilter = !showFilter;
-				}}>Filter</button
+				}}>Filter</Button
 			>
 			<span>
 				{#if showFilter}
@@ -78,7 +79,7 @@
 		<span id="options-and-search">
 			<label for="results per page">Results Per Page:</label>
 			<input type="number" min="1" max="100" id="results per page" bind:value={perPage} />
-			<button
+			<Button
 				onclick={() => {
 					const formElement = document.getElementsByName(
 						'search and filter'
@@ -88,7 +89,7 @@
 						console.log('tempZip: ', tempZip);
 						searchOnClick();
 					}
-				}}>Search</button
+				}}>Search</Button
 			>
 		</span>
 	</form>
@@ -106,5 +107,14 @@
 	}
 	form > * {
 		flex-grow: 1;
+	}
+	input,
+	select {
+		border-color: var(--mid);
+		padding: 0.125rem 0rem;
+		border-style: solid;
+		background-color: var(--dark);
+		color: var(--light-accent);
+		font-size: 1rem;
 	}
 </style>
