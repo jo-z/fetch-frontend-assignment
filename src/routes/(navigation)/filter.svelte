@@ -8,7 +8,6 @@
 		sortDirection = $bindable('asc'),
 		perPage = $bindable(25),
 		distance = $bindable(null),
-		matchEnabled = false,
 		searchOnClick
 	}: {
 		breeds: Array<string>;
@@ -17,7 +16,6 @@
 		sortDirection: 'asc' | 'desc';
 		perPage: number;
 		distance: number | null;
-		matchEnabled: boolean;
 		searchOnClick: () => void;
 	} = $props();
 	let currentZip: { code?: string } = getContext('currentZip');
@@ -92,7 +90,6 @@
 					}
 				}}>Search</button
 			>
-			<a href="/match" class={[!matchEnabled && 'disabled']}>Match</a>
 		</span>
 	</form>
 </div>
@@ -109,9 +106,5 @@
 	}
 	form > * {
 		flex-grow: 1;
-	}
-	.disabled {
-		pointer-events: none;
-		text-decoration: line-through;
 	}
 </style>

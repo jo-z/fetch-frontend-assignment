@@ -93,7 +93,6 @@
 		searchOnClick={() => {
 			search();
 		}}
-		matchEnabled={Boolean(selectedDogs?.size)}
 	/>
 </div>
 {#if dogs.length}
