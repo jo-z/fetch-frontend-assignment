@@ -2,7 +2,9 @@
 	let { children, ...props } = $props();
 </script>
 
-<button {...props}>{@render children?.()}</button>
+<button style:cursor={`${props?.disabled ? 'not-allowed' : 'pointer'}`} {...props}
+	>{@render children?.()}</button
+>
 
 <style>
 	button {

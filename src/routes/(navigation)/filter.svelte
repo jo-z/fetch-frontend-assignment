@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import Button from '$lib/Button.svelte';
-
+	import { slide } from 'svelte/transition';
 	let {
 		breeds,
 		selectedBreeds = $bindable([]),
@@ -35,7 +35,7 @@
 			>
 			<span id="sort-content-container">
 				{#if showSort}
-					<span>
+					<span transition:slide>
 						<label for="sort-field">Sort Field:</label>
 						<select id="sort-field" bind:value={sortField}>
 							<option value="breed">Breed</option>
@@ -43,7 +43,7 @@
 							<option value="name">Name</option>
 						</select>
 					</span>
-					<span>
+					<span transition:slide>
 						<label for="sort-direction">Sort Direction:</label>
 						<select id="sort-direction" bind:value={sortDirection}>
 							<option value="asc">Ascending</option>
@@ -61,7 +61,7 @@
 			>
 			<span id="filter-content-container">
 				{#if showFilter}
-					<span id="breeds-container">
+					<span id="breeds-container" transition:slide>
 						<label for="breeds">Breeds:</label>
 						<select id="breeds" multiple bind:value={selectedBreeds} size="10">
 							{#each breeds as breed}
@@ -69,7 +69,8 @@
 							{/each}
 						</select>
 					</span>
-					<label for="distance">Distance:</label><input
+					<label for="distance" transition:slide>Distance:</label><input
+						transition:slide
 						type="number"
 						min="0"
 						id="distance"
@@ -77,8 +78,15 @@
 						size="5"
 					/>
 					miles from{' '}
-					<label for="zipcode">Zip Code:</label>
-					<input id="zipcode" type="text" pattern={`[0-9]{5}`} size="5" bind:value={tempZip} />
+					<label transition:slide for="zipcode">Zip Code:</label>
+					<input
+						transition:slide
+						id="zipcode"
+						type="text"
+						pattern={`[0-9]{5}`}
+						size="5"
+						bind:value={tempZip}
+					/>
 				{/if}
 			</span>
 		</span>
@@ -97,6 +105,8 @@
 						currentZip.code = tempZip;
 						console.log('tempZip: ', tempZip);
 						searchOnClick();
+						showFilter = false;
+						showSort = false;
 					}
 				}}>Search</Button
 			>
