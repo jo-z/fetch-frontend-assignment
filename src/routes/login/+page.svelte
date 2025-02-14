@@ -6,6 +6,9 @@
 	let error = $state(0);
 </script>
 
+<svelte:head>
+	<title>Login to Shelter Luv!</title>
+</svelte:head>
 <Instructions />
 
 <form

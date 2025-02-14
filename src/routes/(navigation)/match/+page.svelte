@@ -23,6 +23,8 @@
 	});
 </script>
 
+<svelte:head><title>Find your match on Shelter Luv!</title></svelte:head>
+
 {#if match}
 	<span>
 		<img src={match.img} alt={`picture of ${match.name}`} />

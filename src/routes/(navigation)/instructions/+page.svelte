@@ -1,3 +1,6 @@
+<svelte:head>
+	<title>Instructions on how to use Shelter Luv!</title>
+</svelte:head>
 <h2>Instructions:</h2>
 <p>
 	After logging in below, you will be taken to our listing of available dogs. You may use the

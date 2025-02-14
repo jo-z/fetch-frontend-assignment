@@ -10,6 +10,8 @@
 	});
 </script>
 
+<svelte:head>View your favorites on Shelter Luv!</svelte:head>
+
 {#if dogs.length}
 	<span>
 		{#each dogs as dogInfo}

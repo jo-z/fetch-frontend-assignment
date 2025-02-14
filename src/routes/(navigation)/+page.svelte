@@ -87,6 +87,8 @@
 	});
 </script>
 
+<svelte:head><title>Search our dogs on Shelter Luv!</title></svelte:head>
+
 <div>
 	<Filter
 		{breeds}
