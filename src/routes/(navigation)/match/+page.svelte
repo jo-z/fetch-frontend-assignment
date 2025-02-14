@@ -16,12 +16,21 @@
 		const dog = await getDogs([matchId]);
 
 		match = dog[0];
-		if (match) selectedDogs.clear();
+		if (match) {
+			selectedDogs.clear();
+			selectedDogs.add(match.id);
+		}
 	});
 </script>
 
 {#if match}
-	<DogComponent {...match} />
+	<span>
+		<img src={match.img} alt={`picture of ${match.name}`} />
+		<p>Congratulations!!!</p>
+		<p>
+			You matched with {match.name}, the {match.age} year old {match.breed}. Many happy returns!
+		</p>
+	</span>
 {:else if !selectedDogs.size}
 	<p>
 		No dogs currently favorited. Please find some new favorites on <a href="/">the search page!</a>
@@ -30,4 +39,11 @@
 	<p>Please wait for your match</p>
 {/if}
 
-<style></style>
+<style>
+	span {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 2rem;
+	}
+</style>
