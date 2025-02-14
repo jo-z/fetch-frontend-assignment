@@ -24,10 +24,8 @@
 	};
 	let distance: Promise<number | null> = $derived(calculateDistance(currentZip?.code));
 	const toggleFavorite = (id: string) => {
-		console.log('id: ', id);
 		if (selectedDogs.has(id)) selectedDogs.delete(id);
 		else selectedDogs.add(id);
-		console.log('selectedDogs: ', selectedDogs);
 	};
 </script>
 
