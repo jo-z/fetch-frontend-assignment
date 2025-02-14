@@ -103,7 +103,6 @@
 					)[0] as HTMLFormElement | null;
 					if (formElement?.checkValidity()) {
 						currentZip.code = tempZip;
-						console.log('tempZip: ', tempZip);
 						searchOnClick();
 						showFilter = false;
 						showSort = false;
