@@ -1,3 +1,8 @@
+<script>
+	import { cubicOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
+</script>
+
 <svg
 	version="1.1"
 	id="Layer_1"
@@ -11,6 +16,7 @@
 	enable-background="new 0 0 2587.639 742.289"
 	xml:space="preserve"
 	role="img"
+	transition:fade={{ duration: 1000, easing: cubicOut }}
 >
 	<title>Favorited Dog</title>
 	<g>

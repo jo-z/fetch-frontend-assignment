@@ -38,10 +38,10 @@
 	}}
 >
 	<div class="image-box">
-		{#if selectedDogs.has(id)}<FavoriteBorder />
-		{:else}
-			<span id="blank-placeholder"></span>
-		{/if}
+		<span id="blank-placeholder">
+			{#if selectedDogs.has(id)}<FavoriteBorder />
+			{/if}
+		</span>
 		<img src={img} alt={`picture of ${name}`} id="dog-photo" />
 		<BottomBorder --transform="rotateX(0.5turn)" />
 	</div>
@@ -69,20 +69,25 @@
 		background: none;
 		border: none;
 		margin: 1rem;
+		transition: all 1s ease-out;
 	}
 	.selected {
 		background-color: var(--dark-accent);
 		color: var(--light);
+		transition: all 1s ease-out;
 	}
 	.selected p {
 		color: var(--light-accent);
+		transition: all 1s ease-out;
 	}
 
 	.image-box {
 		color: var(--dark-accent);
+		transition: all 1s ease-out;
 	}
 	.selected .image-box {
 		color: var(--light);
+		transition: all 1s ease-out;
 	}
 
 	.image-box {
@@ -101,6 +106,7 @@
 		object-position: 50% 50%;
 	}
 	#blank-placeholder {
+		color: var(--light);
 		height: 100px;
 	}
 </style>

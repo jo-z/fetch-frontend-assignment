@@ -25,7 +25,7 @@
 	let perPage = $state(25);
 	let currentPage = $state(1);
 	let distance: number | null = $state(null);
-	let initialData = $state(false);
+	let loadedData = $state(false);
 
 	let currentZip: { code?: string } = $state({});
 	setContext('currentZip', currentZip);
@@ -53,6 +53,8 @@
 			).results;
 		}
 		console.log('locations: ', locations);
+		loadedData = false;
+		dogs = [];
 		let searchResults;
 		if (searchString) {
 			searchResults = await searchDogsWithString(searchString);
@@ -73,13 +75,14 @@
 		console.log('searchResults: ', searchResults);
 
 		dogs = await getDogs(searchResults.resultIds);
+		loadedData = true;
 	};
 
 	onMount(async () => {
 		try {
 			search();
 			breeds = await getBreeds();
-			initialData = true;
+			loadedData = true;
 		} catch (error) {}
 	});
 </script>
@@ -99,7 +102,7 @@
 </div>
 {#if dogs.length}
 	<div class="dog-container">
-		{#each dogs as dogInfo}
+		{#each dogs as dogInfo (dogInfo.id)}
 			<DogBox {...dogInfo} />
 		{/each}
 	</div>
@@ -124,10 +127,10 @@
 			>
 		{/if}
 	</div>
-{:else if initialData}
+{:else if loadedData}
 	<p>No dogs found. Please try again with more generous search criteria</p>
 {:else}
-	<p>Currently loading Dogs. Please be patient</p>
+	<p id="loading">Currently loading Dogs. Please be patient</p>
 {/if}
 
 <style>
@@ -139,5 +142,8 @@
 		display: flex;
 		justify-content: space-around;
 		flex-wrap: wrap;
+	}
+	#loading {
+		text-align: center;
 	}
 </style>
