@@ -113,6 +113,7 @@
 			>
 		{:else}<span></span>
 		{/if}
+		<p>Page {currentPage}</p>
 		{#if next?.length && totalDogs > perPage * currentPage}
 			<Button
 				id="next-button"
@@ -136,6 +137,7 @@
 	}
 	.dog-container {
 		display: flex;
+		justify-content: space-around;
 		flex-wrap: wrap;
 	}
 </style>

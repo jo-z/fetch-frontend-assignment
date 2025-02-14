@@ -10,7 +10,9 @@
 	viewBox="0 0 2591.598 675.025"
 	enable-background="new 0 0 2591.598 675.025"
 	xml:space="preserve"
+	role="img"
 >
+	<title>Decorative Border</title>
 	<g id="Red_Heart">
 		<g id="Red_Heart_1_">
 			<g>

@@ -22,7 +22,7 @@
 		background-color: var(--light);
 		color: var(--dark);
 		font-family: 'Cabin', sans-serif;
-		font-size: 1rem;
+		font-size: 1.1875rem;
 	}
 	:global(:focus-visible) {
 		outline-color: var(--dark-contrast);
@@ -55,7 +55,7 @@
 	}
 	h1 {
 		font-family: 'Paws', cursive;
-		font-size: 4rem;
+		font-size: 6rem;
 		text-align: center;
 	}
 </style>

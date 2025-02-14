@@ -11,3 +11,22 @@
 </nav>
 
 {@render children()}
+
+<style>
+	nav {
+		display: flex;
+		justify-content: space-around;
+		align-items: baseline;
+	}
+	a {
+		background-color: var(--dark-accent);
+		color: var(--light);
+		text-decoration: none;
+		padding: 0.4rem 0.75rem;
+		border-radius: 8%;
+	}
+
+	a:hover {
+		color: var(--mid-accent);
+	}
+</style>
