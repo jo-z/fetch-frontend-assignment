@@ -107,25 +107,26 @@
 		{/each}
 	</div>
 	<div id="page-button-container">
-		{#if prev?.length && currentPage > 1}
-			<Button
-				onclick={() => {
-					currentPage--;
-					search(prev);
-				}}>Previous</Button
-			>
-		{:else}<span></span>
-		{/if}
+		<Button
+			onclick={prev?.length && currentPage > 1
+				? () => {
+						currentPage--;
+						search(prev);
+					}
+				: () => {}}
+			disabled={!(prev?.length && currentPage > 1)}>Previous</Button
+		>
 		<p>Page {currentPage}</p>
-		{#if next?.length && totalDogs > perPage * currentPage}
-			<Button
-				id="next-button"
-				onclick={() => {
-					currentPage++;
-					search(next);
-				}}>Next</Button
-			>
-		{/if}
+		<Button
+			id="next-button"
+			onclick={next?.length && totalDogs > perPage * currentPage
+				? () => {
+						currentPage++;
+						search(next);
+					}
+				: () => {}}
+			disabled={!(next?.length && totalDogs > perPage * currentPage)}>Next</Button
+		>
 	</div>
 {:else if loadedData}
 	<p>No dogs found. Please try again with more generous search criteria</p>
