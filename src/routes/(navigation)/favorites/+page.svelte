@@ -11,11 +11,23 @@
 </script>
 
 {#if dogs.length}
-	{#each dogs as dogInfo}
-		<DogBox {...dogInfo} />
-	{/each}
-{:else}
+	<span>
+		{#each dogs as dogInfo}
+			<DogBox {...dogInfo} />
+		{/each}
+	</span>
+{:else if !selectedDogs.size}
 	<p>
 		No dogs currently favorited. Please find some new favorites on <a href="/">the search page!</a>
 	</p>
+{:else}
+	<p>Loading dogs, please wait!</p>
 {/if}
+
+<style>
+	span {
+		display: flex;
+		justify-content: space-around;
+		flex-wrap: wrap;
+	}
+</style>
