@@ -52,7 +52,7 @@
 				})
 			).results;
 		}
-		console.log('locations: ', locations);
+
 		loadedData = false;
 		dogs = [];
 		let searchResults;
@@ -72,7 +72,6 @@
 		next = searchResults?.next || '';
 		prev = searchResults?.prev || '';
 		totalDogs = searchResults.total;
-		console.log('searchResults: ', searchResults);
 
 		dogs = await getDogs(searchResults.resultIds);
 		loadedData = true;
@@ -82,7 +81,6 @@
 		try {
 			search();
 			breeds = await getBreeds();
-			loadedData = true;
 		} catch (error) {}
 	});
 </script>
